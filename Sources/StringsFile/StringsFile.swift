@@ -61,6 +61,10 @@ public struct StringsFile {
     }
 
     /// Create a `StringsFile` from a file in the `strings` file format.
+    ///
+    /// - Throws: `FileReadError` if an error occurs reading the file.
+    /// - Throws: `UnicodeDecodingError` if an invalid unicode encoding sequence is detected.
+    /// - Throws: `DeserializationError` if a syntactic error is detected.
     public init(contentsOf fileUrl: URL) throws {
         let data: Data
         do {
@@ -75,6 +79,9 @@ public struct StringsFile {
     ///
     /// The data buffer may start with a Unicode BOM that defines the Unicode encoding form of the
     /// following `strings` data. If no marker is present UTF-8 is assumed.
+    ///
+    /// - Throws: `UnicodeDecodingError` if an invalid unicode encoding sequence is detected.
+    /// - Throws: `DeserializationError` if a syntactic error is detected.
     public init(data: Data) throws {
         let bom = Unicode.BOM(bytes: data)
         let dataAfterBOM = data.suffix(from: bom?.byteCount ?? 0)
@@ -91,6 +98,8 @@ public struct StringsFile {
     }
 
     /// Create a `StringsFile`from a string containing text in the`strings` file format.
+    ///
+    /// - Throws: `DeserializationError` if a syntactic error is detected.
     public init(string: String) throws {
         do {
             entries = try Self.parse(scalars: string.unicodeScalars)
@@ -105,7 +114,7 @@ public struct StringsFile {
         }
     }
 
-    /// The serialized `strings` file, in UTF-8 encoding.
+    /// Returns a data buffer with the serialized `strings` file, in UTF-8 encoding.
     public func serializedRepresentation() throws -> Data {
         var output = String.UnicodeScalarView()
         for (entryIndex, entry) in entries.enumerated() {
