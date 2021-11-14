@@ -1,4 +1,10 @@
-// Copyright (c) 2021 Cunningo S.L.U.
+//------------------------------------------------------------------------------
+// Copyright (c) 2021 Cunningo S.L.U. and the project authors
+//
+// Licensed under the Apache License, Version 2.0
+// See LICENSE.txt for license information:
+// https://github.com/cunningo/StringsFile/blob/main/LICENSE.txt
+//------------------------------------------------------------------------------
 
 extension String.UnicodeScalarView.SubSequence {
     mutating func take(until predicate: (Element) -> Bool) -> SubSequence {
